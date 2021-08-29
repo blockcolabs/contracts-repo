@@ -14,7 +14,7 @@ pub contract CommonNFT: NonFungibleToken {
     pub event DepositMultiple(ids: [UInt64], to: Address?)
     pub event Minted(id: UInt64, developerID: UInt64, developerMetadata: String, contentURL: String)
     pub event MintedMultiple(startID: UInt64, developerID: UInt64, startEdition: UInt64, number: UInt64, developerMetadata: String, contentURL: String)
-    pub event DeleteMultiple(ids: [UInt64], from: Address?)
+    pub event Delete(id: UInt64, from: Address?)
 
     // Named Paths
     //
@@ -50,6 +50,10 @@ pub contract CommonNFT: NonFungibleToken {
             self.edition = initEdition
             self.developerMetadata = initDeveloperMetadata
             self.contentURL = initContentURL
+        }
+
+        destroy() {
+            emit Delete(id: self.id, from: self.owner?.address)
         }
     }
 
@@ -125,8 +129,6 @@ pub contract CommonNFT: NonFungibleToken {
 
                 count = count + 1
             }
-
-            emit DeleteMultiple(ids: deleteIDs, from: self.owner?.address)
         }
 
         // deposit
